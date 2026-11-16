@@ -1,0 +1,57 @@
+name: VIZO PSX - Build PCSX-ReARMed
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build Android ARMv7 NEON
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git make python3 build-essential
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install NDK
+        run: |
+          sdkmanager --install "ndk;27.2.12479018"
+
+      - name: Clone Libretro build system
+        run: |
+          git clone --depth 1 https://github.com/libretro/libretro-super.git
+
+      - name: Clone PCSX-ReARMed
+        run: |
+          git clone --depth 1 https://github.com/libretro/pcsx_rearmed.git libretro-super/libretro-pcsx_rearmed
+
+      - name: Build ARMv7 NEON core
+        run: |
+          export ANDROID_NDK_HOME="$ANDROID_HOME/ndk/27.2.12479018"
+          export ANDROID_NDK_ROOT="$ANDROID_NDK_HOME"
+          export PATH="$ANDROID_NDK_HOME:$PATH"
+          cd libretro-super
+          chmod +x libretro-build-android-mk.sh
+          ./libretro-build-android-mk.sh pcsx_rearmed
+
+      - name: Find build output
+        run: |
+          find libretro-super -type f -name "*.so" -print
+
+      - name: Upload ARMv7 core
+        uses: actions/upload-artifact@v4
+        with:
+          name: VIZO-PSX-ARMv7-NEON
+          path: |
+            libretro-super/dist/android/armeabi-v7a-neon/
+          if-no-files-found: error
