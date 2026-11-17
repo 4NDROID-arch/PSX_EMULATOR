@@ -117,7 +117,7 @@ Java_com_psx_crash_PSXBridge_initialize(
     }
 
     core_handle = dlopen(
-        "libpcsx_rearmed_libretro_android.so",
+        "pcsx_rearmed_libretro_android.so",
         RTLD_NOW
     );
 
