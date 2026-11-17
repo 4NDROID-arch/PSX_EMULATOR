@@ -122,8 +122,12 @@ Java_com_psx_crash_PSXBridge_initialize(
     );
 
     if (!core_handle) {
-        LOGE("Core loading failed: %s", dlerror());
-        return JNI_FALSE;
+    const char *error = dlerror();
+
+    LOGE("Core loading failed: %s",
+         error ? error : "Unknown error");
+
+    return JNI_FALSE;
     }
 
     if (!load_symbol((void **)&p_retro_set_environment, "retro_set_environment") ||
@@ -221,6 +225,7 @@ Java_com_psx_crash_PSXBridge_shutdown(
     if (core_initialized) {
         p_retro_deinit();
         core_initialized = 0;
+        LOGI("Core library loaded successfully");
     }
 
     if (core_handle) {
