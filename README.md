@@ -1,5 +1,5 @@
 
-# VIZO PSX
+# Yes7user
 
 A lightweight PlayStation 1 emulator for Android, powered by PCSX-ReARMed.
 
@@ -47,7 +47,7 @@ A lightweight PlayStation 1 emulator for Android, powered by PCSX-ReARMed.
    `/sdcard/PSX/saves/`
 
 3. Add your legally obtained PS1 game files to the games folder.
-4. Launch VIZO PSX and select a game.
+4. Launch Yes7user PSX and select a game.
 
 ## Supported Formats
 
@@ -95,7 +95,7 @@ app/src/main/jniLibs/armeabi-v7a/
 
 ## Disclaimer
 
-VIZO PSX is an independent project and is not affiliated with Sony Interactive Entertainment.
+Yes7user PSX is an independent project and is not affiliated with Sony Interactive Entertainment.
 
 PlayStation is a trademark of Sony Interactive Entertainment.
 
@@ -103,4 +103,4 @@ This project does not include copyrighted games or BIOS files. Users must provid
 
 ## Developer
 
-**VIZO XITS**
+**Yes7user**
