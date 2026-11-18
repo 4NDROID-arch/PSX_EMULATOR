@@ -19,6 +19,14 @@ A lightweight PlayStation 1 emulator for Android, powered by PCSX-ReARMed.
 
 ## Screenshots
 
+### Home Screen
+![VIZO PSX Home](Home.png)
+
+### Game Screen
+![VIZO PSX Gameplay](Game.png)
+
+### HUD Controls
+![VIZO PSX HUD](Hud.png)
 
 
 ## Requirements
