@@ -1,5 +1,5 @@
 
-name: VIZO PSX - Crash Edition Build
+name: VIZO PSX - Dual ABI Build
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   build:
-    name: Build VIZO PSX ARMv7
+    name: Build VIZO PSX 32-bit + 64-bit
     runs-on: ubuntu-22.04
 
     steps:
@@ -21,9 +21,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-
-      - name: Verify Java
-        run: java -version
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v4
@@ -38,9 +35,8 @@ jobs:
 
       - name: Verify NDK
         run: |
-          echo "NDK: $ANDROID_NDK_HOME"
-          test -d "$ANDROID_NDK_HOME"
           test -f "$ANDROID_NDK_HOME/ndk-build"
+          "$ANDROID_NDK_HOME/ndk-build" --version
 
       - name: Install dependencies
         run: |
@@ -56,41 +52,53 @@ jobs:
           cd libretro-super
           ./libretro-fetch.sh pcsx_rearmed
 
-      - name: Build PCSX-ReARMed
+      - name: Build PCSX-ReARMed ARMv7
         run: |
           cd libretro-super
-          chmod +x libretro-build-android-mk.sh
           export PATH="$ANDROID_NDK_HOME:$PATH"
           export TARGET_ABI="armeabi-v7a"
           ./libretro-build-android-mk.sh pcsx_rearmed
 
-      - name: Verify PCSX Core
+      - name: Build PCSX-ReARMed ARM64
         run: |
-          find libretro-super/dist -type f -name "*.so" -print
+          cd libretro-super
+          export PATH="$ANDROID_NDK_HOME:$PATH"
+          export TARGET_ABI="arm64-v8a"
+          ./libretro-build-android-mk.sh pcsx_rearmed
+
+      - name: Verify PCSX cores
+        run: |
           test -f libretro-super/dist/android/armeabi-v7a/pcsx_rearmed_libretro_android.so
+          test -f libretro-super/dist/android/arm64-v8a/pcsx_rearmed_libretro_android.so
 
       - name: Build VIZO JNI Bridge
         run: |
           "$ANDROID_NDK_HOME/ndk-build" \
             NDK_PROJECT_PATH="$GITHUB_WORKSPACE" \
             APP_BUILD_SCRIPT="$GITHUB_WORKSPACE/jni/Android.mk" \
-            NDK_APPLICATION_MK="$GITHUB_WORKSPACE/jni/Application.mk"
+            NDK_APPLICATION_MK="$GITHUB_WORKSPACE/jni/Application.mk" \
+            APP_ABI="armeabi-v7a arm64-v8a"
 
-      - name: Verify JNI Bridge
+      - name: Verify JNI Bridges
         run: |
-          find libs -type f -name "*.so" -print
           test -f libs/armeabi-v7a/libpsxbridge.so
+          test -f libs/arm64-v8a/libpsxbridge.so
 
-      - name: Upload PCSX Core
+      - name: Prepare Release
+        run: |
+          mkdir -p release/armeabi-v7a
+          mkdir -p release/arm64-v8a
+
+          cp libretro-super/dist/android/armeabi-v7a/pcsx_rearmed_libretro_android.so release/armeabi-v7a/
+          cp libs/armeabi-v7a/libpsxbridge.so release/armeabi-v7a/
+
+          cp libretro-super/dist/android/arm64-v8a/pcsx_rearmed_libretro_android.so release/arm64-v8a/
+          cp libs/arm64-v8a/libpsxbridge.so release/arm64-v8a/
+
+      - name: Upload Dual ABI Build
         uses: actions/upload-artifact@v4
         with:
-          name: VIZO-PSX-ARMv7
-          path: libretro-super/dist/android/armeabi-v7a/pcsx_rearmed_libretro_android.so
+          name: VIZO-PSX-DUAL-ABI
+          path: release/
           if-no-files-found: error
-
-      - name: Upload JNI Bridge
-        uses: actions/upload-artifact@v4
-        with:
-          name: VIZO-PSX-JNI-ARMv7
-          path: libs/armeabi-v7a/libpsxbridge.so
-          if-no-files-found: error
+          
