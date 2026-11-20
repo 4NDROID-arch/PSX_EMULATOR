@@ -1,85 +1,110 @@
+# Yes7user PSX Emulator
 
-# Yes7user
+A lightweight PlayStation 1 emulator for Android, powered by **PCSX-ReARMed** and a custom Android JNI bridge.
 
-A lightweight PlayStation 1 emulator for Android, powered by PCSX-ReARMed.
+**Current release:** `v1.0.1`  
+**Developer:** Yes7user  
+**Platform:** Android
+
+---
 
 ## Features
 
-- Play PS1 games on Android.
-- ARMv7 (32-bit) support.
-- Landscape fullscreen gameplay.
-- On-screen virtual controller.
-- Multitouch controls.
-- Support for CHD and CUE/BIN game formats.
-- Save and load game states.
-- Independent save states for each game.
-- Customizable HUD controls.
+- Play PlayStation 1 games on Android.
+- Powered by the PCSX-ReARMed Libretro core.
+- On-screen virtual controls with multitouch support.
+- Customizable on-screen control layout.
+- Adjustable virtual controller transparency.
+- Fullscreen gameplay.
+- Landscape gameplay.
+- Settings screen for emulator options.
 - FPS counter.
-- Optimized for low-end Android devices.
+- Save states and load states.
+- Separate save-state files for individual games.
+- Support for `.chd` and `.cue/.bin` game images.
+- Optimizations intended to improve playability on lower-end Android devices.
+
+## What's new in 1.0.1
+
+- Added a Settings screen.
+- Added a fullscreen option.
+- Added an option to adjust the transparency of the on-screen controls.
+- Updated player input: Player 1 uses the phone's touchscreen controls, while Player 2 uses an external game controller.
+- Fixed the BIOS save issue.
+- Reduced the available cheats to the first six entries.
 
 ## Screenshots
 
 ### Home Screen
-![VIZO PSX Home](Home.png)
 
-### Game Screen
-![VIZO PSX Gameplay](Game.png)
+![Home Screen](Home.png)
 
-### HUD Controls
-![VIZO PSX HUD](Hud.png)
+### Gameplay
 
+![Gameplay](Game.png)
+
+### On-screen Controls
+
+![On-screen Controls](Hud.png)
 
 ## Requirements
 
 - Android 5.0 or later.
-- ARMv7 (armeabi-v7a).
+- ARMv7 device (`armeabi-v7a`, `ARM64`).
 - At least 2 GB RAM recommended.
+
+> The repository currently includes the `armeabi-v7a, ARM64` native library build.
 
 ## Installation
 
-1. Download and install the APK.
-2. Create the following folders:
+1. Download the APK from the [Releases](https://github.com/4NDROID-arch/PSX_EMULATOR/releases) page.
+2. Install the APK on your Android device.
+3. Open the emulator and set up your game and BIOS files when prompted.
+4. Select a supported game image to start playing.
 
-   `/sdcard/PSX/games/`
+## Game and BIOS files
 
-   `/sdcard/PSX/bios/`
+This project does not provide PlayStation BIOS files or commercial game images.
 
-   `/sdcard/PSX/saves/`
+Use only BIOS and game files that you are legally entitled to use. Place or select your files using the emulator's file picker and the storage locations configured by the app.
 
-3. Add your legally obtained PS1 game files to the games folder.
-4. Launch Yes7user PSX and select a game.
-
-## Supported Formats
+### Supported game formats
 
 - `.chd`
 - `.cue`
-- `.bin` (used with its matching CUE file)
+- `.bin` — use with its matching `.cue` file.
+- `.iso`
+- `.exe`
 
-Make sure CUE files reference the correct BIN filenames.
+Make sure each CUE file references the correct BIN filename.
+
+## Controls
+
+- **Player 1:** On-screen touchscreen controls.
+- **Player 2:** External physical game controller.
+
+The on-screen controls support multitouch. Their transparency can be adjusted in the available control settings.
 
 ## Save States
 
-Each game has its own save-state file.
+The emulator supports saving and loading game states. Save states are kept separately for each game so that one game's state does not overwrite another game's state.
 
-Example:
+Keep backup copies of important save data before reinstalling the app or changing builds.
 
-`save1_state_Crash_Bandicoot.vst`
-
-`save1_state_Crash_Team_Racing.vst`
-
-## Native Libraries
+## Native Libraries and Technology
 
 The project uses:
 
-- PCSX-ReARMed Libretro Core
-- Custom JNI Bridge
-- Android NDK
+- PCSX-ReARMed Libretro core.
+- Custom JNI bridge.
+- Android NDK native libraries.
 
-ABI:
+### Included ABI
 
-`armeabi-v7a`
+- `armeabi-v7a`
+- `ARM64`
 
-## Project Structure
+### Native project structure
 
 ```text
 jni/
@@ -93,14 +118,18 @@ app/src/main/jniLibs/armeabi-v7a/
 └── libpsxbridge.so
 ```
 
+## Project Repository
+
+[4NDROID-arch/PSX_EMULATOR](https://github.com/4NDROID-arch/PSX_EMULATOR)
+
 ## Disclaimer
 
-Yes7user PSX is an independent project and is not affiliated with Sony Interactive Entertainment.
+Yes7user PSX Emulator is an independent community project and is not affiliated with, endorsed by, or sponsored by Sony Interactive Entertainment.
 
 PlayStation is a trademark of Sony Interactive Entertainment.
 
-This project does not include copyrighted games or BIOS files. Users must provide their own legally obtained files.
+This repository does not include copyrighted PlayStation BIOS files or commercial game files. Users are responsible for supplying files they are legally permitted to use.
 
-## Developer
+---
 
-**Yes7user**
+**Developed by Yes7user**
